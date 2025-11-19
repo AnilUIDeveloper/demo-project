@@ -6,21 +6,39 @@ import LayoutMain from "./components/layout/layout_main";
 import MenuPage from "./pages/menu/menu_page";
 import OrdersPage from "./pages/orders/orders_page";
 import { CartProvider } from "./context/cart_context";
+import { AuthProvider } from "./context/auth_context";
+import ProtectedRoute from "./services/protected_routes";
 
 function App() {
   return (
     <div className="App">
       <CartProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route element={<LayoutMain />}>
-              <Route path="/menu" element={<MenuPage />} />
-              <Route path="/orders" element={<OrdersPage />} />
-              <Route path="/login" element={<LoginForm />} />
-              <Route path="/register" element={<RegisterForm />} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
+        <AuthProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route element={<LayoutMain />}>
+                <Route
+                  path="/menu"
+                  element={
+                    <ProtectedRoute>
+                      <MenuPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/orders"
+                  element={
+                    <ProtectedRoute>
+                      <OrdersPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="/login" element={<LoginForm />} />
+                <Route path="/register" element={<RegisterForm />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </AuthProvider>
       </CartProvider>
     </div>
   );

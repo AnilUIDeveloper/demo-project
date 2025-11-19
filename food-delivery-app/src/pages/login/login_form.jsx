@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import CustomInput from "../../components/custom_input/custom_input";
+import { useAuth } from "../../context/auth_context";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = ({ onSubmit }) => {
   const [values, setValues] = useState({ email: "", password: "" });
   const [touched, setTouched] = useState({});
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -36,6 +40,8 @@ const LoginForm = ({ onSubmit }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setTouched({ email: true, password: true });
+    login();
+    navigate("/menu");
     if (!isValid) return;
 
     const payload = { ...values };
